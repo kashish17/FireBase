@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".TvDetailsScrollingActivity"
+    tools:showIn="@layout/activity_tv_details_scrolling">
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:scaleType="fitXY"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/star"/>
+
+            <TextView
+                android:id="@+id/rateingtv"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="/10" />
+
+        </LinearLayout>
+
+        <TextView
+            android:padding="5dp"
+            android:id="@+id/overViewTv"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="overview"
+            android:textSize="15dp"
+            android:maxLines="4"
+            android:minLines="4"/>
+        <TextView
+            android:visibility="gone"
+            android:padding="5dp"
+            android:id="@+id/dateTv"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="Release Date: "
+            android:textSize="15dp"
+            />
+        <TextView
+            android:visibility="gone"
+            android:padding="5dp"
+            android:id="@+id/timeTv"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="Runtime :"
+            android:textSize="15dp"
+            />
+
+        <TextView
+            android:visibility="gone"
+            android:padding="5dp"
+            android:id="@+id/noOfSeasons"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="Number of Seasons "
+            android:textSize="15dp"
+            />
+        <TextView
+            android:visibility="gone"
+            android:padding="5dp"
+            android:id="@+id/noOfEpisodes"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:text="Number of Episodes "
+            android:textSize="15dp"
+
+
+            />
+
+        <TextView
+            android:id="@+id/trailersTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Trailers"
+            android:textSize="30dp"
+            android:visibility="gone"
+            android:textStyle="bold"/>
+
+        <android.support.v7.widget.RecyclerView
+
+            android:layout_width="match_parent"
+            android:id="@+id/TrailersTv"
+            android:layout_height="wrap_content"/>
+
+
+        <TextView
+            android:id="@+id/castTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:visibility="gone"
+            android:text="Cast"
+            android:textSize="30dp"
+            android:textStyle="bold"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:id="@+id/CastTv"
+
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/similarTextView"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:text="Similar Shows"
+            android:textSize="30dp"
+            android:textStyle="bold"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:id="@+id/SimilarTVShows"
+            android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>
