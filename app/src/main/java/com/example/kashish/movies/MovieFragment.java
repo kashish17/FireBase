@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.kashish.movies.UpcomingPOJO.UpcomingResponse;
@@ -43,7 +44,7 @@ public class MovieFragment extends Fragment {
     public  static String UPCOMING="upcoming";
     public  static String ON_SHOWING="onshowing";
 
-    RecyclerView recyclerView;
+    RecyclerView recyclerViewUp,recyclerViewTop,recyclerViewPop,recyclerViewNow;
 
 
     MovieAdapter adapter;
@@ -56,12 +57,25 @@ public class MovieFragment extends Fragment {
     List<com.example.kashish.movies.UpcomingPOJO.Result> upcomingList = new ArrayList<>();
     Retrofit retrofit;
 
-    MovieService service;
-     LinearLayoutManager linearLayoutManager;
-    int page = 1;
 
-    boolean isScrolling=false;
-    int currentItems,totalItems,scollOutItems;
+
+    MovieService service;
+     LinearLayoutManager linearLayoutManagerUp,linearLayoutManagerTop,linearLayoutManagerPop,linearLayoutManagerNow;
+
+
+    boolean isScrollingup=false, isScrollingpop=false,isScrollingtop=false,isScrollingnow=false;
+
+    int pageUp = 1;
+    int currentItemsUp = 0,totalItemsUp = 0,scollOutItemsUp = 0;
+
+    int pagePop = 1;
+    int currentItemsPop = 0,totalItemsPop = 0,scollOutItemsPop = 0;
+
+    int pagetop = 1;
+    int currentItemstop = 0,totalItemstop = 0,scollOutItemstop = 0;
+
+    int pagenow = 1;
+    int currentItemsnow = 0,totalItemsnow = 0,scollOutItemsnow = 0;
 
     public MovieFragment() {
         // Required empty public constructor
@@ -92,9 +106,8 @@ public class MovieFragment extends Fragment {
 
 
     public void fetchUpcoming(View view){
-        page=1;
-        currentItems=0;totalItems=0;scollOutItems=0;
-        recyclerView= view.findViewById(R.id.Upcoming);
+
+        recyclerViewUp= view.findViewById(R.id.Upcoming);
         Upadapter = new UpcomingBigMovieAdapter(getContext(), upcomingList, new MovieClickListener() {
             @Override
             public void onMovieClick(View view, int position) {
@@ -107,14 +120,14 @@ public class MovieFragment extends Fragment {
 
             }
         });
-        recyclerView.setAdapter(Upadapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewUp.setAdapter(Upadapter);
+        recyclerViewUp.setItemAnimator(new DefaultItemAnimator());
         //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.HORIZONTAL));
 
 
 
-        linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        linearLayoutManagerUp = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
+        recyclerViewUp.setLayoutManager(linearLayoutManagerUp);
         //   Toast.makeText(getContext(), "Home Fragment Loaded", Toast.LENGTH_SHORT).show();
 
 
@@ -122,25 +135,25 @@ public class MovieFragment extends Fragment {
         // Toast.makeText(getContext(), "hit done", Toast.LENGTH_SHORT).show();
         getDataUp();
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerViewUp.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
-                    isScrolling = true;
+                    isScrollingup = true;
                 }
             }
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                currentItems=linearLayoutManager.getChildCount();
-                totalItems=linearLayoutManager.getItemCount();
-                scollOutItems=linearLayoutManager.findFirstVisibleItemPosition();
+                currentItemsUp=linearLayoutManagerUp.getChildCount();
+                totalItemsUp=linearLayoutManagerUp.getItemCount();
+                scollOutItemsUp=linearLayoutManagerUp.findFirstVisibleItemPosition();
 
-                if(isScrolling&& (currentItems+scollOutItems==totalItems)){
-                    isScrolling=false;
-                    page++;
+                if(isScrollingup&& (currentItemsUp+scollOutItemsUp==totalItemsUp)){
+                    isScrollingup=false;
+                    pageUp++;
                     getDataUp();
                 }
 
@@ -149,9 +162,8 @@ public class MovieFragment extends Fragment {
     }
 
     public void getDataUp( ) {
-        Call<UpcomingResponse> call = null;
+        Call<UpcomingResponse> call = service.getUpcomingMovies(Contract.API_KEY, pageUp);
 
-        call = service.getUpcomingMovies(Contract.API_KEY, page);
         call.enqueue(new Callback<UpcomingResponse>() {
             @Override
             public void onResponse(Call<UpcomingResponse> call, Response<UpcomingResponse> response) {
@@ -168,9 +180,8 @@ public class MovieFragment extends Fragment {
     }
 
     public void fetchNowShowing(View view){
-        page=1;
-        currentItems=0;totalItems=0;scollOutItems=0;
-        recyclerView= view.findViewById(R.id.NowShaowing);
+
+        recyclerViewNow= view.findViewById(R.id.NowShaowing);
         bigMovieAdapter = new BigMovieAdapter(getContext(), nowShaowingList, new MovieClickListener() {
             @Override
             public void onMovieClick(View view, int position) {
@@ -182,14 +193,14 @@ public class MovieFragment extends Fragment {
 
             }
         });
-        recyclerView.setAdapter(bigMovieAdapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewNow.setAdapter(bigMovieAdapter);
+        recyclerViewNow.setItemAnimator(new DefaultItemAnimator());
         //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.HORIZONTAL));
 
 
 
-        linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        linearLayoutManagerNow = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
+        recyclerViewNow.setLayoutManager(linearLayoutManagerNow);
         //   Toast.makeText(getContext(), "Home Fragment Loaded", Toast.LENGTH_SHORT).show();
 
 
@@ -197,25 +208,25 @@ public class MovieFragment extends Fragment {
         // Toast.makeText(getContext(), "hit done", Toast.LENGTH_SHORT).show();
         getDataNow();
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerViewNow.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
-                    isScrolling = true;
+                    isScrollingnow = true;
                 }
             }
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                currentItems=linearLayoutManager.getChildCount();
-                totalItems=linearLayoutManager.getItemCount();
-                scollOutItems=linearLayoutManager.findFirstVisibleItemPosition();
+                currentItemsnow=linearLayoutManagerNow.getChildCount();
+                totalItemsnow=linearLayoutManagerNow.getItemCount();
+                scollOutItemsnow=linearLayoutManagerNow.findFirstVisibleItemPosition();
 
-                if(isScrolling&& (currentItems+scollOutItems==totalItems)){
-                    isScrolling=false;
-                    page++;
+                if(isScrollingnow&& (currentItemsnow+scollOutItemsnow==totalItemsnow)){
+                    isScrollingnow=false;
+                    pagenow++;
                     getDataNow();
                 }
 
@@ -226,9 +237,7 @@ public class MovieFragment extends Fragment {
 
     }
     public void getDataNow( ){
-        Call<NowShowingResponse> call=null;
-
-        call=service.getNowShawingMovies(Contract.API_KEY,page);
+        Call<NowShowingResponse> call=service.getNowShawingMovies(Contract.API_KEY,pagenow);
 
        call.enqueue(new Callback<NowShowingResponse>() {
            @Override
@@ -248,9 +257,8 @@ public class MovieFragment extends Fragment {
 
 
     public void fetchTopRated(View view){
-        //page=1;
-        currentItems=0;totalItems=0;scollOutItems=0;
-        recyclerView= view.findViewById(R.id.TopRated);
+
+        recyclerViewTop = view.findViewById(R.id.TopRated);
         Tadapter = new MovieTopRatedAdapter(getContext(), topRatedList, new MovieClickListener() {
             @Override
             public void onMovieClick(View view, int position) {
@@ -262,14 +270,14 @@ public class MovieFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        recyclerView.setAdapter(Tadapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewTop.setAdapter(Tadapter);
+        recyclerViewTop.setItemAnimator(new DefaultItemAnimator());
         //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.HORIZONTAL));
 
 
 
-        linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        linearLayoutManagerTop = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
+        recyclerViewTop.setLayoutManager(linearLayoutManagerTop);
         //   Toast.makeText(getContext(), "Home Fragment Loaded", Toast.LENGTH_SHORT).show();
 
 
@@ -277,25 +285,25 @@ public class MovieFragment extends Fragment {
         // Toast.makeText(getContext(), "hit done", Toast.LENGTH_SHORT).show();
         getDataTop(TOP_RATED);
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerViewTop.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
-                    isScrolling = true;
+                    isScrollingtop = true;
                 }
             }
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                currentItems=linearLayoutManager.getChildCount();
-                totalItems=linearLayoutManager.getItemCount();
-                scollOutItems=linearLayoutManager.findFirstVisibleItemPosition();
+                currentItemstop=linearLayoutManagerTop.getChildCount();
+                totalItemstop=linearLayoutManagerTop.getItemCount();
+                scollOutItemstop=linearLayoutManagerTop.findFirstVisibleItemPosition();
 
-                if(isScrolling&& (currentItems+scollOutItems==totalItems)){
-                    isScrolling=false;
-                    page++;
+                if(isScrollingtop&& (currentItemstop+scollOutItemstop==totalItemstop)){
+                    isScrollingtop=false;
+                    pagetop++;
                     getDataTop(TOP_RATED);
                 }
 
@@ -307,9 +315,7 @@ public class MovieFragment extends Fragment {
 
 
     public void getDataTop( String str){
-        Call<TopRatedResponse> call=null;
-
-        call=service.getTopRatedMovies(Contract.API_KEY,page);
+        Call<TopRatedResponse> call = service.getTopRatedMovies(Contract.API_KEY,pagetop);
 
         call.enqueue(new Callback<TopRatedResponse>() {
             @Override
@@ -328,8 +334,8 @@ public class MovieFragment extends Fragment {
 
     public void fetchPopularPost(View view){
 
-        page=1;
-        recyclerView= view.findViewById(R.id.Popular);
+
+        recyclerViewPop= view.findViewById(R.id.Popular);
         adapter = new MovieAdapter(getContext(), popularList, new MovieClickListener() {
             @Override
             public void onMovieClick(View view, int position) {
@@ -341,14 +347,14 @@ public class MovieFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        recyclerView.setAdapter(adapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewPop.setAdapter(adapter);
+        recyclerViewPop.setItemAnimator(new DefaultItemAnimator());
         //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.HORIZONTAL));
 
 
 
-         linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
-        recyclerView.setLayoutManager(linearLayoutManager);
+         linearLayoutManagerPop = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
+        recyclerViewPop.setLayoutManager(linearLayoutManagerPop);
      //   Toast.makeText(getContext(), "Home Fragment Loaded", Toast.LENGTH_SHORT).show();
 
 
@@ -356,25 +362,25 @@ public class MovieFragment extends Fragment {
        // Toast.makeText(getContext(), "hit done", Toast.LENGTH_SHORT).show();
         getData(POPULAR);
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerViewPop.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if(newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL){
-                    isScrolling = true;
+                    isScrollingpop = true;
                 }
             }
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                currentItems=linearLayoutManager.getChildCount();
-                totalItems=linearLayoutManager.getItemCount();
-                scollOutItems=linearLayoutManager.findFirstVisibleItemPosition();
+                currentItemsPop=linearLayoutManagerPop.getChildCount();
+                totalItemsPop=linearLayoutManagerPop.getItemCount();
+                scollOutItemsPop=linearLayoutManagerPop.findFirstVisibleItemPosition();
 
-                if(isScrolling&& (currentItems+scollOutItems==totalItems)){
-                    isScrolling=false;
-                    page++;
+                if(isScrollingpop&& (currentItemsPop+scollOutItemsPop==totalItemsPop)){
+                    isScrollingpop=false;
+                    pagePop++;
                     getData(POPULAR);
                 }
 
@@ -389,7 +395,7 @@ public class MovieFragment extends Fragment {
     public void getData( String str){
         Call<PopularsResponse> call=null;
         if(str.equals("popular"))
-            call = service.getPopularMovies(Contract.API_KEY,page);
+            call = service.getPopularMovies(Contract.API_KEY,pagePop);
 
         call.enqueue(new Callback<PopularsResponse>() {
             @Override

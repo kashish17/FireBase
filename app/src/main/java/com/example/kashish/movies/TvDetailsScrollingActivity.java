@@ -1,5 +1,6 @@
 package com.example.kashish.movies;
 
+import android.arch.persistence.room.Room;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,16 +12,21 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kashish.movies.Cast.Cast;
 import com.example.kashish.movies.Cast.CastResponse;
+import com.example.kashish.movies.RoomDatabase.AppDatabase;
+import com.example.kashish.movies.RoomDatabase.MovieTable;
+import com.example.kashish.movies.RoomDatabase.TvTable;
 import com.example.kashish.movies.SimilarMovies.SimilarMovieResponse;
 import com.example.kashish.movies.SimilarTvShows.SimilarTvShowResponse;
 import com.example.kashish.movies.Trailers.MovieTrailers;
@@ -48,6 +54,7 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     MovieService service;
     TextView castTv,similarTv,trailersTv;
+    String titleT,genreT,homepageT;
 
     List<com.example.kashish.movies.TvCastDetils.Cast> tvcastList = new ArrayList<>();
     List<Result> tvtrailersList = new ArrayList<>();
@@ -63,12 +70,24 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
     boolean isShow = true;
     int scrollRange = -1;
     TextView Name,detail,date,time,rate,genre,seasons,episodes;
+
+    AppDatabase appDatabase;
+    ImageButton heartTv, shareTv;
+    boolean isLiked;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tv_details_scrolling);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        appDatabase= Room.databaseBuilder(this,AppDatabase.class,"movie_db").allowMainThreadQueries().build();
+
+        heartTv=findViewById(R.id.addTv);
+        shareTv=findViewById(R.id.shareTv);
+
+
 
         backD=findViewById(R.id.backDropTv);
         poster=findViewById(R.id.posterTv);
@@ -90,6 +109,12 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
 
         Intent intent=getIntent();
         id =intent.getLongExtra("id",0);
+
+        boolean check=appDatabase.getdao().getIsMarkedTv(id);
+        isLiked=check;
+        if(check){
+            heartTv.setImageDrawable(TvDetailsScrollingActivity.this.getResources().getDrawable(R.drawable.ic_favorite_red_24dp));
+        }
 
         Retrofit.Builder builder = new Retrofit.Builder()
                 .baseUrl("http://api.themoviedb.org/3/tv/")
@@ -124,7 +149,11 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
                         }
                     }).build().load(url2.trim()).error(R.drawable.ic_launcher_foreground).into(backD);
 
+                    if(tvDetailsResponse.getHomepage()!=null)
+                    homepageT=tvDetailsResponse.getHomepage().toString();
+
                     Name.setText(tvDetailsResponse.getName());
+                    titleT=Name.getText().toString();
                     rate.setText(tvDetailsResponse.getVoteAverage().toString()+rate.getText());
                     detail.setText(tvDetailsResponse.getOverview()+"");
                     if(tvDetailsResponse.getGenres().size()!=0){
@@ -135,6 +164,7 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
                             str+=tvDetailsResponse.getGenres().get(i).getName()+" ";
                         }
                         genre.setText(str);
+                        genreT=str;
                     }
 
                     if(tvDetailsResponse.getFirstAirDate()!=null){
@@ -142,7 +172,7 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
                         date.setText(date.getText()+"        "+tvDetailsResponse.getFirstAirDate()+"");
                     }
 
-                    if(tvDetailsResponse.getEpisodeRunTime()!=null){
+                    if(tvDetailsResponse.getEpisodeRunTime().size()!=0){
                         time.setVisibility(View.VISIBLE);
                         time.setText(time.getText()+"         "+tvDetailsResponse.getEpisodeRunTime().get(0).toString()+" mins");
                     }
@@ -172,6 +202,52 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
                         }
 
                     });
+
+                    shareTv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            ArrayList<String> data= new ArrayList<>();
+                            data.add(titleT);
+                            data.add(genreT);
+                            data.add(homepageT);
+                            String data1= TextUtils.join("\n",data);
+                            Intent intent=new Intent();
+                            intent.setAction(Intent.ACTION_SEND);
+                            intent.setType("text/plain");
+                            intent.putExtra(intent.EXTRA_TEXT,data1);
+                            startActivity(intent);
+                        }
+                    });
+
+                    heartTv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            if(isLiked==false) {
+                                TvTable tvTable=new TvTable();
+                                tvTable.setTvId(tvDetailsResponse.getId());
+                                tvTable.setTvTitle(tvDetailsResponse.getName());
+                                tvTable.setTvPosterPath(tvDetailsResponse.getPosterPath());
+
+                                isLiked=true;
+                                heartTv.setImageDrawable(TvDetailsScrollingActivity.this.getResources().getDrawable(R.drawable.ic_favorite_red_24dp));
+                                tvTable.setLiked(true);
+                                appDatabase.getdao().addTv(tvTable);
+                                Toast.makeText(TvDetailsScrollingActivity.this,"added to favorites",Toast.LENGTH_SHORT).show();
+
+                            }
+                            else{
+                                // heart.setImageDrawable(DetailsScrollingActivity.this.getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+
+                                TvTable tvTable=new TvTable();
+                                tvTable.setTvId(tvDetailsResponse.getId());
+                                appDatabase.getdao().deleteTv(tvTable);
+                            }
+                        }
+                    });
+
+
                     getdataCast();
                     getdataTvTrailers();
                     getdataSimilarShows();
@@ -187,6 +263,7 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
 
 
     }
+
 
     public void getdataTvTrailers() {
 
@@ -303,7 +380,7 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
             @Override
             public void onMovieClick(View view, int position) {
                 com.example.kashish.movies.TvCastDetils.Cast object = tvcastList.get(position);
-                Intent intent = new Intent(TvDetailsScrollingActivity.this, TvDetailsScrollingActivity.class);
+                Intent intent = new Intent(TvDetailsScrollingActivity.this, CastDetailActivity.class);
                 intent.putExtra("id", object.getId());
                 intent.putExtra("mode", 0);
                 startActivity(intent);

@@ -13,20 +13,21 @@
         <ImageView
             android:id="@+id/image1"
             android:layout_width="140dp"
-            android:scaleType="fitXY"
             android:layout_height="175dp"
+            android:scaleType="fitXY"
             android:src="@drawable/ic_launcher_foreground" />
 
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="match_parent"
-            android:layout_margin="5dp"
-            android:layout_height="wrap_content"
-            android:text="MovieName"
-            android:textSize="18sp"
-            android:minLines="3"
-            android:maxLines="3"
-            android:ellipsize="end"/>
+
+
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:minLines="3"
+
+                android:text="MovieName"
+                android:textSize="18dp" />
 
     </LinearLayout>
 

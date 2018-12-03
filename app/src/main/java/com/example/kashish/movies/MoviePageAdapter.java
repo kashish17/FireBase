@@ -17,15 +17,13 @@ public class MoviePageAdapter extends FragmentPagerAdapter {
         else if(i == 1){
             return new TvFragment();
         }
-        else if(i == 2){
-            return new FavouriteFragment();
-        }
+
         return null;
 
     }
 
     @Override
     public int getCount() {
-        return 3;
+        return 2;
     }
 }

@@ -14,8 +14,7 @@ public class MovieDetails {
     private Boolean adult;
     @SerializedName("backdrop_path")
     private String backdropPath;
-    @SerializedName("belongs_to_collection")
-    private BelongsToCollection belongsToCollection;
+
     @Expose
     private Long budget;
     @Expose
@@ -36,18 +35,14 @@ public class MovieDetails {
     private Double popularity;
     @SerializedName("poster_path")
     private String posterPath;
-    @SerializedName("production_companies")
-    private List<ProductionCompany> productionCompanies;
-    @SerializedName("production_countries")
-    private List<ProductionCountry> productionCountries;
+
     @SerializedName("release_date")
     private String releaseDate;
     @Expose
     private Long revenue;
     @Expose
     private Long runtime;
-    @SerializedName("spoken_languages")
-    private List<SpokenLanguage> spokenLanguages;
+
     @Expose
     private String status;
     @Expose
@@ -77,13 +72,7 @@ public class MovieDetails {
         this.backdropPath = backdropPath;
     }
 
-    public BelongsToCollection getBelongsToCollection() {
-        return belongsToCollection;
-    }
 
-    public void setBelongsToCollection(BelongsToCollection belongsToCollection) {
-        this.belongsToCollection = belongsToCollection;
-    }
 
     public Long getBudget() {
         return budget;
@@ -165,21 +154,7 @@ public class MovieDetails {
         this.posterPath = posterPath;
     }
 
-    public List<ProductionCompany> getProductionCompanies() {
-        return productionCompanies;
-    }
 
-    public void setProductionCompanies(List<ProductionCompany> productionCompanies) {
-        this.productionCompanies = productionCompanies;
-    }
-
-    public List<ProductionCountry> getProductionCountries() {
-        return productionCountries;
-    }
-
-    public void setProductionCountries(List<ProductionCountry> productionCountries) {
-        this.productionCountries = productionCountries;
-    }
 
     public String getReleaseDate() {
         return releaseDate;
@@ -205,13 +180,6 @@ public class MovieDetails {
         this.runtime = runtime;
     }
 
-    public List<SpokenLanguage> getSpokenLanguages() {
-        return spokenLanguages;
-    }
-
-    public void setSpokenLanguages(List<SpokenLanguage> spokenLanguages) {
-        this.spokenLanguages = spokenLanguages;
-    }
 
     public String getStatus() {
         return status;

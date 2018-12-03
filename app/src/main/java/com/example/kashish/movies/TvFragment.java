@@ -36,7 +36,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class TvFragment extends Fragment {
 
-    RecyclerView recyclerView;
+    RecyclerView recyclerViewOn,recyclerViewTopTv,recyclerViewPopTv,recyclerViewToday;
 
     AiringTodayApdapter airingTodayApdapter;
     OnTheAirAdapter onTheAirAdapter;
@@ -47,6 +47,8 @@ public class TvFragment extends Fragment {
     int currentItems=0,scollOutItems=0,totalItems=0;
     boolean isScrolling;
 
+    LinearLayoutManager linearLayoutManagerOn,linearLayoutManagerTopTv,linearLayoutManagerPoptv,linearLayoutManagerToday;
+
     List<com.example.kashish.movies.TV.TVOnTheAir.Result> onTheAirList = new ArrayList<>();
     List<com.example.kashish.movies.TVPopular.Result> tvPopularList=new ArrayList<>();
     List<com.example.kashish.movies.AiringToday.Result> tvAiringTodayist = new ArrayList<>();
@@ -56,7 +58,7 @@ public class TvFragment extends Fragment {
     Retrofit retrofit;
 
     MovieService service;
-    LinearLayoutManager linearLayoutManager;
+
 
     public TvFragment() {
         // Required empty public constructor
@@ -92,7 +94,7 @@ public class TvFragment extends Fragment {
     public void fetchAiringToday(View view){
          page=1;
          currentItems=0;scollOutItems=0;totalItems=0;
-         recyclerView =view.findViewById(R.id.airToday);
+         recyclerViewToday =view.findViewById(R.id.airToday);
         airingTodayApdapter =new AiringTodayApdapter(getContext(), tvAiringTodayist, new MovieClickListener() {
             @Override
             public void onMovieClick(View view, int position) {
@@ -103,17 +105,17 @@ public class TvFragment extends Fragment {
                 startActivity(intent);
             }
         });
-        recyclerView.setAdapter(airingTodayApdapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewToday.setAdapter(airingTodayApdapter);
+        recyclerViewToday.setItemAnimator(new DefaultItemAnimator());
         //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.HORIZONTAL));
 
 
 
-        linearLayoutManager = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        linearLayoutManagerToday = new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false);
+        recyclerViewToday.setLayoutManager(linearLayoutManagerToday);
         //   Toast.makeText(getContext(), "Home Fragment Loaded", Toast.LENGTH_SHORT).show();
         getDataAiringToday();
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerViewToday.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -125,9 +127,9 @@ public class TvFragment extends Fragment {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                currentItems=linearLayoutManager.getChildCount();
-                totalItems=linearLayoutManager.getItemCount();
-                scollOutItems=linearLayoutManager.findFirstVisibleItemPosition();
+                currentItems=linearLayoutManagerToday.getChildCount();
+                totalItems=linearLayoutManagerToday.getItemCount();
+                scollOutItems=linearLayoutManagerToday.findFirstVisibleItemPosition();
 
                 if(isScrolling&& (currentItems+scollOutItems==totalItems)){
                     isScrolling=false;
@@ -171,7 +173,7 @@ public class TvFragment extends Fragment {
         currentItems = 0;
         scollOutItems = 0;
         totalItems = 0;
-        recyclerView = view.findViewById(R.id.TopRatedTV);
+        recyclerViewTopTv = view.findViewById(R.id.TopRatedTV);
 
         tvTopRatedAdapter = new TvTopRatedAdapter(getContext(), tvTopRatedList, new MovieClickListener() {
             @Override
@@ -184,16 +186,16 @@ public class TvFragment extends Fragment {
 
             }
         });
-        recyclerView.setAdapter(tvTopRatedAdapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewTopTv.setAdapter(tvTopRatedAdapter);
+        recyclerViewTopTv.setItemAnimator(new DefaultItemAnimator());
         //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.HORIZONTAL));
 
 
-        linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        linearLayoutManagerTopTv = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewTopTv.setLayoutManager(linearLayoutManagerTopTv);
         //   Toast.makeText(getContext(), "Home Fragment Loaded", Toast.LENGTH_SHORT).show();
         getdataTvTopRated();
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerViewTopTv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -205,9 +207,9 @@ public class TvFragment extends Fragment {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                currentItems = linearLayoutManager.getChildCount();
-                totalItems = linearLayoutManager.getItemCount();
-                scollOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+                currentItems = linearLayoutManagerTopTv.getChildCount();
+                totalItems = linearLayoutManagerTopTv.getItemCount();
+                scollOutItems = linearLayoutManagerTopTv.findFirstVisibleItemPosition();
 
                 if (isScrolling && (currentItems + scollOutItems == totalItems)) {
                     isScrolling = false;
@@ -251,7 +253,7 @@ public class TvFragment extends Fragment {
         currentItems = 0;
         scollOutItems = 0;
         totalItems = 0;
-        recyclerView = view.findViewById(R.id.onTheair);
+        recyclerViewOn = view.findViewById(R.id.onTheair);
 
        onTheAirAdapter=new OnTheAirAdapter(getContext(), onTheAirList, new MovieClickListener() {
            @Override
@@ -265,16 +267,16 @@ public class TvFragment extends Fragment {
        });
 
 
-        recyclerView.setAdapter(onTheAirAdapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewOn.setAdapter(onTheAirAdapter);
+        recyclerViewOn.setItemAnimator(new DefaultItemAnimator());
         //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.HORIZONTAL));
 
 
-        linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        linearLayoutManagerOn = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewOn.setLayoutManager(linearLayoutManagerOn);
         //   Toast.makeText(getContext(), "Home Fragment Loaded", Toast.LENGTH_SHORT).show();
         getdataOnTheAir();
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerViewOn.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -286,9 +288,9 @@ public class TvFragment extends Fragment {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                currentItems = linearLayoutManager.getChildCount();
-                totalItems = linearLayoutManager.getItemCount();
-                scollOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+                currentItems = linearLayoutManagerOn.getChildCount();
+                totalItems = linearLayoutManagerOn.getItemCount();
+                scollOutItems = linearLayoutManagerOn.findFirstVisibleItemPosition();
 
                 if (isScrolling && (currentItems + scollOutItems == totalItems)) {
                     isScrolling = false;
@@ -330,7 +332,7 @@ public class TvFragment extends Fragment {
         currentItems = 0;
         scollOutItems = 0;
         totalItems = 0;
-        recyclerView = view.findViewById(R.id.PopularTV);
+        recyclerViewPopTv = view.findViewById(R.id.PopularTV);
 
         tvPopularAdapter =new TvPopularAdapter(getContext(), tvPopularList, new MovieClickListener() {
             @Override
@@ -344,16 +346,16 @@ public class TvFragment extends Fragment {
         });
 
 
-        recyclerView.setAdapter(tvPopularAdapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewPopTv.setAdapter(tvPopularAdapter);
+        recyclerViewPopTv.setItemAnimator(new DefaultItemAnimator());
         //recyclerView.addItemDecoration(new DividerItemDecoration(getContext(),DividerItemDecoration.HORIZONTAL));
 
 
-        linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(linearLayoutManager);
+        linearLayoutManagerPoptv = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        recyclerViewPopTv.setLayoutManager(linearLayoutManagerPoptv);
         //   Toast.makeText(getContext(), "Home Fragment Loaded", Toast.LENGTH_SHORT).show();
         getdataPopular();
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerViewPopTv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -365,9 +367,9 @@ public class TvFragment extends Fragment {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                currentItems = linearLayoutManager.getChildCount();
-                totalItems = linearLayoutManager.getItemCount();
-                scollOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+                currentItems = linearLayoutManagerPoptv.getChildCount();
+                totalItems = linearLayoutManagerPoptv.getItemCount();
+                scollOutItems = linearLayoutManagerPoptv.findFirstVisibleItemPosition();
 
                 if (isScrolling && (currentItems + scollOutItems == totalItems)) {
                     isScrolling = false;

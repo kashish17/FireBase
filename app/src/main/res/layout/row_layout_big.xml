@@ -24,8 +24,9 @@
             android:text="MovieName"
             android:textSize="18sp"
             android:minLines="3"
-            android:maxLines="3"
-            android:ellipsize="end"/>
+            android:maxLines="3" />
+
+
     </LinearLayout>
 
 </android.support.v7.widget.CardView>

@@ -11,8 +11,7 @@ public class CastResponse {
 
     @SerializedName("cast")
     private List<Cast> mCast;
-    @SerializedName("crew")
-    private List<Crew> mCrew;
+
     @SerializedName("id")
     private Long mId;
 
@@ -24,13 +23,7 @@ public class CastResponse {
         mCast = cast;
     }
 
-    public List<Crew> getCrew() {
-        return mCrew;
-    }
 
-    public void setCrew(List<Crew> crew) {
-        mCrew = crew;
-    }
 
     public Long getId() {
         return mId;

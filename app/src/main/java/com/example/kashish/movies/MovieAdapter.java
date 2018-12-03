@@ -1,6 +1,7 @@
 package com.example.kashish.movies;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +9,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.kashish.movies.RoomDatabase.AppDatabase;
+import com.example.kashish.movies.RoomDatabase.MovieTable;
 import com.example.kashish.movies.popularPOJO.Result;
 import com.squareup.picasso.Picasso;
 
@@ -16,8 +20,10 @@ import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieViewHolder> {
     Context context;
+
     List<Result> lists;
     MovieClickListener movieClickListener;
+
 
     MovieAdapter (Context context, List<Result> lists, MovieClickListener movieClickListener){
         this.lists = lists;
@@ -37,7 +43,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull final MovieViewHolder movieViewHolder, int i) {
-        Result result = lists.get(i);
+        final Result result = lists.get(i);
     //  Picasso.get().load(Contract.IMAGE_URL+result.getPosterPath()).into(movieViewHolder.imageView);
 
       Log.d("lalalal", Contract.IMAGE_URL + result.getPosterPath());
@@ -50,14 +56,18 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieViewHolder> {
           }
       }).build().load(url.trim()).error(R.drawable.ic_launcher_foreground).into(movieViewHolder.imageView);
 
-        movieViewHolder.textView.setText(result.getTitle());
-        movieViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+
+      movieViewHolder.textView.setText(result.getTitle());
+      movieViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 movieClickListener.onMovieClick(view,movieViewHolder.getAdapterPosition());
             }
         });
+
+
+
     }
 
     @Override

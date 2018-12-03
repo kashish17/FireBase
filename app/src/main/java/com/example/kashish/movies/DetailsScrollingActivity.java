@@ -1,5 +1,6 @@
 package com.example.kashish.movies;
 
+import android.arch.persistence.room.Room;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -13,10 +14,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +27,8 @@ import android.widget.Toast;
 import com.example.kashish.movies.Cast.Cast;
 import com.example.kashish.movies.Cast.CastResponse;
 import com.example.kashish.movies.Details.MovieDetails;
+import com.example.kashish.movies.RoomDatabase.AppDatabase;
+import com.example.kashish.movies.RoomDatabase.MovieTable;
 import com.example.kashish.movies.SimilarMovies.SimilarMovieResponse;
 import com.example.kashish.movies.Trailers.MovieTrailers;
 import com.example.kashish.movies.popularPOJO.Result;
@@ -46,7 +51,7 @@ public class DetailsScrollingActivity extends AppCompatActivity {
     SMovieAdapter sMovieAdapter;
     LinearLayoutManager linearLayoutManager;
     CastAdapter castAdapter;
-
+    String titleS,genreS,homepage;
 
     List<Cast> castList = new ArrayList<>();
     List<com.example.kashish.movies.Trailers.Result> trailerList = new ArrayList<>();
@@ -60,6 +65,10 @@ public class DetailsScrollingActivity extends AppCompatActivity {
     boolean isShow = true;
     int scrollRange = -1;
     RecyclerView recyclerView;
+    ImageButton heart, share;
+
+    boolean isLiked=false;
+    AppDatabase appDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,9 +76,11 @@ public class DetailsScrollingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         appBarLayout=findViewById(R.id.app_bar);
         collapsingToolbarLayout=findViewById(R.id.Ctoolbar_layout);
+        heart=findViewById(R.id.add);
+       share =findViewById(R.id.shareButton);
 
 
-
+        appDatabase= Room.databaseBuilder(this,AppDatabase.class,"movie_db").allowMainThreadQueries().build();
 
 
         setSupportActionBar(toolbar);
@@ -87,6 +98,14 @@ public class DetailsScrollingActivity extends AppCompatActivity {
 
         Intent intent=getIntent();
         id =intent.getLongExtra("id",0);
+
+        boolean check=appDatabase.getdao().getIsMarked(id);
+
+        if(check){
+            heart.setImageDrawable(DetailsScrollingActivity.this.getResources().getDrawable(R.drawable.ic_favorite_red_24dp));
+            isLiked=check;
+            }
+
 
 
         Retrofit.Builder builder = new Retrofit.Builder()
@@ -120,16 +139,26 @@ public class DetailsScrollingActivity extends AppCompatActivity {
                         }
                     }).build().load(url2.trim()).error(R.drawable.ic_launcher_foreground).into(backD);
 
+                    if(movieDetails.getHomepage()!=null)
+                    homepage=movieDetails.getHomepage().toString();
+
                     Name.setText(movieDetails.getTitle());
+                    titleS=Name.getText().toString();
                     rate.setText(movieDetails.getVoteAverage().toString()+rate.getText());
+                    if(movieDetails.getOverview()!=null)
                     detail.setText(movieDetails.getOverview()+"");
+
+                    if(movieDetails.getReleaseDate()!=null)
                     date.setText(date.getText()+movieDetails.getReleaseDate().toString());
+
+                    if(movieDetails.getRuntime()!=null)
                     time.setText(time.getText()+movieDetails.getRuntime().toString());
                     String str="";
 
                     for(int i=0;i<movieDetails.getGenres().size();i++){
                         str+=movieDetails.getGenres().get(i).getName()+" ";
                     }
+                    genreS=str;
                     genre.setText(str);
                     tagline.setText(movieDetails.getTagline());
 
@@ -154,6 +183,52 @@ public class DetailsScrollingActivity extends AppCompatActivity {
                     getTrailers();
                     getSimilarMovies();
                     getCast();
+
+                    share.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            ArrayList<String> data= new ArrayList<>();
+                            data.add(titleS);
+                            data.add(genreS);
+                            data.add(homepage);
+                            String data1= TextUtils.join("\n",data);
+                            Intent intent=new Intent();
+                            intent.setAction(Intent.ACTION_SEND);
+                            intent.setType("text/plain");
+                            intent.putExtra(intent.EXTRA_TEXT,data1);
+                            startActivity(intent);
+                        }
+                    });
+
+                    heart.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            if(isLiked==false) {
+                                MovieTable movieTable=new MovieTable();
+                                movieTable.setMovieId(movieDetails.getId());
+                                movieTable.setMoiveTitle(movieDetails.getTitle());
+                                movieTable.setMoviePosterPath(movieDetails.getPosterPath());
+
+                                isLiked=true;
+                                heart.setImageDrawable(DetailsScrollingActivity.this.getResources().getDrawable(R.drawable.ic_favorite_red_24dp));
+                                movieTable.setLiked(true);
+                                appDatabase.getdao().addMovie(movieTable);
+            Toast.makeText(DetailsScrollingActivity.this,"added to favorites",Toast.LENGTH_SHORT).show();
+
+                            }
+                            else{
+                                heart.setImageDrawable(DetailsScrollingActivity.this.getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
+
+                                MovieTable movieTable1=new MovieTable();
+                                movieTable1.setMovieId(movieDetails.getId());
+                                Log.d("mesg",movieTable1.isLiked()+"");
+                                appDatabase.getdao().deleteMovie(movieTable1);
+                            }
+                        }
+                    });
+
                 }
         }
 
@@ -165,6 +240,10 @@ public class DetailsScrollingActivity extends AppCompatActivity {
 
 
     }
+
+
+
+
     public  void getCast(){
         recyclerView=findViewById(R.id.Cast);
 
@@ -172,9 +251,9 @@ public class DetailsScrollingActivity extends AppCompatActivity {
             @Override
             public void onMovieClick(View view, int position) {
               Cast object=castList.get(position);
-                Intent intent=new Intent(DetailsScrollingActivity.this,DetailsScrollingActivity.class);
+                Intent intent=new Intent(DetailsScrollingActivity.this,CastDetailActivity.class);
                 intent.putExtra("id",object.getId());
-                intent.putExtra("mode",0);
+
                 startActivity(intent);
             }
         });

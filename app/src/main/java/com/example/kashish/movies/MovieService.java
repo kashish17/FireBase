@@ -4,6 +4,9 @@ import com.example.kashish.movies.AiringToday.AiringTodayResponse;
 import com.example.kashish.movies.Cast.Cast;
 import com.example.kashish.movies.Cast.CastResponse;
 import com.example.kashish.movies.Details.MovieDetails;
+import com.example.kashish.movies.People.PeopleResponse;
+import com.example.kashish.movies.PeopleMovieCreditd.PeopleCreditMivieResponse;
+import com.example.kashish.movies.PeopleTvCredits.PeopleTvCreditResponse;
 import com.example.kashish.movies.SimilarMovies.SimilarMovieResponse;
 import com.example.kashish.movies.SimilarTvShows.SimilarTvShowResponse;
 import com.example.kashish.movies.TV.TVOnTheAir.OnTheAirResponse;
@@ -72,4 +75,17 @@ public interface MovieService {
 
     @GET("{id}/similar")
     Call<SimilarTvShowResponse> getTvSimilar(@Path("id") long i, @Query("api_key") String str);
+
+
+    @GET("{id}")
+    Call<PeopleResponse> getpeople(@Path("id") long i, @Query("api_key") String str);
+
+    @GET("{id}/movie_credits")
+    Call<PeopleCreditMivieResponse> getPeopleMovie(@Path("id") long i, @Query("api_key") String str);
+
+
+    @GET("{id}/tv_credits")
+    Call<PeopleTvCreditResponse> getPeopleTv(@Path("id") long i, @Query("api_key") String str);
+
+
 }

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/movies"
-        android:title="movie"
-        android:icon="@drawable/ic_movie_filter_black_24dp" />
-    <item android:id="@+id/tv"
-        android:title="tv"
-        android:icon="@drawable/ic_tv_black_24dp" />
-    <item android:id="@+id/fav"
-    android:title="movie"
-    android:icon="@drawable/ic_favorite_border_black_24dp" />
+    <item android:id="@+id/fabMenu"
+        android:title="favorites"/>
+        <!--android:icon="@drawable/ic_favorite_border_black_24dp" />-->
+
+    <item android:id="@+id/aboutUs"
+        android:title="About Us"/>
+    
+
 
 
 </menu>

@@ -19,6 +19,7 @@
             app:popupTheme="@style/AppTheme.PopupOverlay" />
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"
+
             app:tabIndicatorColor="@android:color/white"
             android:layout_width="match_parent"
             app:tabIndicatorGravity="top"
@@ -40,12 +41,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <android.support.design.widget.TabItem
-                android:id="@+id/fav"
-                android:text="Favourite"
-                android:icon="@drawable/ic_favorite_border_black_24dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <!--<android.support.design.widget.TabItem-->
+                <!--android:id="@+id/fav"-->
+                <!--android:text="Favourite"-->
+                <!--android:icon="@drawable/ic_favorite_border_black_24dp"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content" />-->
 
         </android.support.design.widget.TabLayout>
 
