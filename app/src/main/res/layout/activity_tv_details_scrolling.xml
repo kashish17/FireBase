@@ -23,12 +23,27 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed"
             app:toolbarId="@+id/toolbar">
 
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/backDropTv"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/ic_launcher_background" />
+                 />
+
+                <com.github.ybq.android.spinkit.SpinKitView
+                    android:id="@+id/mback"
+                    style="@style/SpinKitView.Large.Wave"
+                    android:layout_width="50dp"
+                    android:layout_gravity="center"
+                    android:layout_height="50dp"
+                    app:SpinKit_Color="#fff"
+                    />
+
+            </FrameLayout>
 
             <ImageView
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
@@ -16,6 +17,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.kashish.movies.UpcomingPOJO.UpcomingResponse;
@@ -56,7 +59,8 @@ public class MovieFragment extends Fragment {
     List<com.example.kashish.movies.nowShowingPOJO.Result> nowShaowingList=new ArrayList<>();
     List<com.example.kashish.movies.UpcomingPOJO.Result> upcomingList = new ArrayList<>();
     Retrofit retrofit;
-
+    LinearLayout linearLayout;
+    ProgressBar progressBar;
 
 
     MovieService service;
@@ -93,13 +97,15 @@ public class MovieFragment extends Fragment {
                 .addConverterFactory(GsonConverterFactory.create());
 
         retrofit = builder.build();
-
+        linearLayout=view.findViewById(R.id.mfrag);
+        progressBar=view.findViewById(R.id.pm);
         service = retrofit.create(MovieService.class);
-
         fetchPopularPost(view);
         fetchTopRated(view);
         fetchNowShowing(view);
         fetchUpcoming(view);
+        progressBar.setVisibility(View.GONE);
+      linearLayout.setVisibility(View.VISIBLE);
         return view;
     }
 

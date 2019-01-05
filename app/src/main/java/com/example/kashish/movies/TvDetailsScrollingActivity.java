@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ import com.example.kashish.movies.TvCastDetils.TvCastResponse;
 import com.example.kashish.movies.TvDetails.TvDetailsResponse;
 import com.example.kashish.movies.TvTrailers.Result;
 import com.example.kashish.movies.TvTrailers.TvTrailersResponse;
+import com.github.ybq.android.spinkit.style.Wave;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -68,6 +70,7 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
     LinearLayoutManager linearLayoutManager;
     ImageView backD,poster;
     boolean isShow = true;
+    ProgressBar progressBar;
     int scrollRange = -1;
     TextView Name,detail,date,time,rate,genre,seasons,episodes;
 
@@ -81,6 +84,13 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        progressBar= findViewById(R.id.mback);
+
+
+
+        Wave wave =new Wave();
+        progressBar.setIndeterminateDrawable(wave);
 
         appDatabase= Room.databaseBuilder(this,AppDatabase.class,"movie_db").allowMainThreadQueries().build();
 
@@ -148,6 +158,7 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
                             Log.d(("lalalal"),exception.toString());
                         }
                     }).build().load(url2.trim()).error(R.drawable.ic_launcher_foreground).into(backD);
+                    progressBar.setVisibility(View.GONE);
 
                     if(tvDetailsResponse.getHomepage()!=null)
                     homepageT=tvDetailsResponse.getHomepage().toString();

@@ -201,7 +201,7 @@ public class DetailsScrollingActivity extends AppCompatActivity {
                         }
                     });
 
-                    heart.setOnClickListener(new View.OnClickListener() {
+                    heart.setOnClickListener( new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
@@ -220,9 +220,10 @@ public class DetailsScrollingActivity extends AppCompatActivity {
                             }
                             else{
                                 heart.setImageDrawable(DetailsScrollingActivity.this.getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
-
+                                int MTid =appDatabase.getdao().getMovieTableId(movieDetails.getId());
                                 MovieTable movieTable1=new MovieTable();
-                                movieTable1.setMovieId(movieDetails.getId());
+                                movieTable1.setMovieTableId(MTid);
+                                isLiked=true;
                                 Log.d("mesg",movieTable1.isLiked()+"");
                                 appDatabase.getdao().deleteMovie(movieTable1);
                             }

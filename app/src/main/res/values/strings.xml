@@ -96,4 +96,5 @@
     </string>
     <string name="title_activity_details_scrolling">DetailsScrollingActivity</string>
     <string name="title_activity_favorites">Favorites</string>
+    <string name="title_activity_search">SearchActivity</string>
 </resources>

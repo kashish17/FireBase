@@ -85,6 +85,11 @@ public class TabHomeActivity extends AppCompatActivity {
             startActivity(intent);
 
         }
+        else if(id== R.id.search){
+            Intent intent= new Intent(this,SearchActivity.class);
+            startActivity(intent);
+        }
+
         return super.onOptionsItemSelected(menuItem);
     }
 
