@@ -21,9 +21,12 @@
 
 
         <LinearLayout
+            android:id="@+id/star"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
             <ImageView
+
                 android:scaleType="fitXY"
                 android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
@@ -48,7 +51,7 @@
             android:id="@+id/overViewTv"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:text="overview"
+            android:text=""
             android:textSize="15dp"
             android:maxLines="4"
             android:minLines="4"/>
@@ -92,7 +95,10 @@
 
             />
         <LinearLayout
+            android:visibility="gone"
+            android:id="@+id/shareHeart"
             android:orientation="horizontal"
+
             android:layout_width="match_parent"
             android:layout_gravity="center"
             android:layout_height="wrap_content">
@@ -102,6 +108,7 @@
                 android:layout_height="40dp"
                 android:layout_marginLeft="80dp"
                 android:background="@drawable/ic_favorite_border_black_24dp"
+
                 />
 
             <View
@@ -121,6 +128,8 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/texts"
+            android:visibility="gone"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

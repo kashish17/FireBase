@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,6 +36,8 @@ import com.example.kashish.movies.TvCastDetils.TvCastResponse;
 import com.example.kashish.movies.TvDetails.TvDetailsResponse;
 import com.example.kashish.movies.TvTrailers.Result;
 import com.example.kashish.movies.TvTrailers.TvTrailersResponse;
+import com.github.ybq.android.spinkit.style.ChasingDots;
+import com.github.ybq.android.spinkit.style.Pulse;
 import com.github.ybq.android.spinkit.style.Wave;
 import com.squareup.picasso.Picasso;
 
@@ -58,6 +61,7 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
     TextView castTv,similarTv,trailersTv;
     String titleT,genreT,homepageT;
 
+    LinearLayout text,star;
     List<com.example.kashish.movies.TvCastDetils.Cast> tvcastList = new ArrayList<>();
     List<Result> tvtrailersList = new ArrayList<>();
     List<com.example.kashish.movies.SimilarTvShows.Result> tvSimilarList = new ArrayList<>();
@@ -71,12 +75,14 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
     ImageView backD,poster;
     boolean isShow = true;
     ProgressBar progressBar;
+    ProgressBar dots;
     int scrollRange = -1;
     TextView Name,detail,date,time,rate,genre,seasons,episodes;
 
     AppDatabase appDatabase;
     ImageButton heartTv, shareTv;
     boolean isLiked;
+    LinearLayout linearLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,13 +91,15 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        progressBar= findViewById(R.id.mback);
-
-
+        progressBar= findViewById(R.id.tback);
+        dots=findViewById(R.id.tpos);
+        linearLayout=findViewById(R.id.shareHeart);
+        star=findViewById(R.id.star);
 
         Wave wave =new Wave();
+        Pulse pulse=new Pulse();
         progressBar.setIndeterminateDrawable(wave);
-
+        dots.setIndeterminateDrawable(pulse);
         appDatabase= Room.databaseBuilder(this,AppDatabase.class,"movie_db").allowMainThreadQueries().build();
 
         heartTv=findViewById(R.id.addTv);
@@ -101,6 +109,7 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
 
         backD=findViewById(R.id.backDropTv);
         poster=findViewById(R.id.posterTv);
+        text=findViewById(R.id.texts);
 
         castTv=findViewById(R.id.castTextView);
         similarTv=findViewById(R.id.similarTextView);
@@ -124,6 +133,9 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
         isLiked=check;
         if(check){
             heartTv.setImageDrawable(TvDetailsScrollingActivity.this.getResources().getDrawable(R.drawable.ic_favorite_red_24dp));
+        }
+        else{
+           // heartTv.setImageDrawable(TvDetailsScrollingActivity.this.getResources().getDrawable(R.drawable.ic_favorite_border_black_24dp));
         }
 
         Retrofit.Builder builder = new Retrofit.Builder()
@@ -150,6 +162,7 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
                             Log.d(("lalalal"),exception.toString());
                         }
                     }).build().load(url.trim()).error(R.drawable.ic_launcher_foreground).into(poster);
+                    dots.setVisibility(View.GONE);
 
                     String url2 = Contract.IMAGE_URL + tvDetailsResponse.getBackdropPath();
                     new Picasso.Builder(TvDetailsScrollingActivity.this).listener(new Picasso.Listener() {
@@ -213,7 +226,9 @@ public class TvDetailsScrollingActivity extends AppCompatActivity {
                         }
 
                     });
-
+                    linearLayout.setVisibility(View.VISIBLE);
+                    text.setVisibility(View.VISIBLE);
+                    star.setVisibility(View.VISIBLE);
                     shareTv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

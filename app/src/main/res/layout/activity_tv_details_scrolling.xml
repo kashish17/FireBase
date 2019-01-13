@@ -35,7 +35,7 @@
                  />
 
                 <com.github.ybq.android.spinkit.SpinKitView
-                    android:id="@+id/mback"
+                    android:id="@+id/tback"
                     style="@style/SpinKitView.Large.Wave"
                     android:layout_width="50dp"
                     android:layout_gravity="center"
@@ -45,6 +45,10 @@
 
             </FrameLayout>
 
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
             <ImageView
 
                 android:id="@+id/posterTv"
@@ -53,7 +57,20 @@
                 android:layout_marginLeft="50dp"
                 android:layout_marginTop="150dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/ic_launcher_background" />
+                 />
+
+
+                <com.github.ybq.android.spinkit.SpinKitView
+                    android:id="@+id/tpos"
+                    style="@style/SpinKitView.Large.Pulse"
+                    android:layout_width="50dp"
+                    android:layout_gravity="center"
+                    android:layout_height="50dp"
+                    app:SpinKit_Color="#fff"
+                    />
+
+
+            </FrameLayout>
 
             <TextView
 
@@ -62,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="190dp"
                 android:layout_marginTop="250dp"
-                android:text="name"
+                android:text=""
                 android:textSize="20dp" />
 
             <TextView
